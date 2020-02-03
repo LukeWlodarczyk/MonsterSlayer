@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monster Slayer</title>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/foundation.min.css" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <div id="app">
+      <section class="row">
+        <div class="small-6 columns">
+          <h1 class="text-center">{{ player.name || 'Player' }}</h1>
+          <div class="healthbar">
+            <div
+              class="healthbar text-center"
+              style="background-color: green; margin: 0; color: white;"
+              :style="{ width: player.health + '%'}"
+            >
+              {{ player.health }}
+            </div>
+          </div>
+        </div>
+        <div class="small-6 columns">
+          <h1 class="text-center">MONSTER</h1>
+          <div class="healthbar">
+            <div
+              class="healthbar text-center"
+              style="background-color: green; margin: 0; color: white;"
+              :style="{ width: monster.health + '%'}"
+            >
+              {{ monster.health }}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section v-if="!isGameStarted" class="row controls">
+        <div class="small-12 columns">
+          <button
+            id="start-game"
+            :disabled="!player.name.length"
+            @click="startGame"
+          >
+            START NEW GAME
+          </button>
+          <input type="text" v-model="player.name" />
+        </div>
+      </section>
+      <section v-if="isGameStarted" class="row controls">
+        <div class="small-12 columns">
+          <button id="attack" @click="attack('player', $event)">ATTACK</button>
+          <button
+            id="special-attack"
+            :disabled="player.isSpecialAttackUsed"
+            @click="specialAttack('player', $event)"
+          >
+            SPECIAL ATTACK
+          </button>
+          <button id="heal" @click="heal('player', $event)">
+            HEAL
+          </button>
+          <button id="give-up" @click="giveUp('player', $event)">
+            GIVE UP
+          </button>
+        </div>
+      </section>
+      <section v-if="comments.length" class="row log">
+        <div class="small-12 columns">
+          <ul>
+            <li
+              v-for="message, index in comments"
+              :class="messageStyle(message.who)"
+              :key="message.id"
+            >
+              {{ message.content }}
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
